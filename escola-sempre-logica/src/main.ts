@@ -69,8 +69,10 @@ class Turma {
 const turma1 = new Turma(1, 10, "Turma de Matemática", "presencial");
 
 const aluno1 = new Aluno("João", "Silva", "joao.silva@email.com", "presencial", 1, new Date(2005, 5, 15), [8, 9, 10]);
+const aluno2 = new Aluno("Gabriela", "Silva", "gabriela.silva@email.com", "presencial", 1, new Date(2004, 9, 159), [7, 5, 10]);
 
 turma1.adicionarAluno(aluno1);
+turma1.adicionarAluno(aluno2);
 
 console.log(turma1);
 
