@@ -57,7 +57,11 @@ class Aluno implements IAluno {
       
     if (notas && notas.length <= 5) {
           this.notas = notas;
-      }             
+      }
+      
+    if (new Date().getFullYear() - nascimento.getFullYear() < 16) {
+        throw new Error("O aluno deve ter pelo menos 16 anos.");
+    }
   }
 
 
