@@ -253,7 +253,21 @@ turma1.removerAluno("lucas.almeida@email.com");
 
 turma1.atualizarAluno("gabriela.silva@email.com", { notas: [5, 4, 3] });
 
+// Buscar aluno
+console.log('Buscar aluno:')
+const alunoBuscado = turma1.buscarAluno("gabriela.silva@email.com");
+if (alunoBuscado) {
+    console.log(`Nome: ${alunoBuscado.nome} ${alunoBuscado.sobrenome}`);
+    console.log(`Email: ${alunoBuscado.email}`);
+    console.log(`Notas: ${alunoBuscado.notas}`);
+    console.log(`Média: ${alunoBuscado.calcularMedia()}`);
+} else {
+    console.log('Aluno não encontrado.');
+}
+console.log('----------------------------------------------------------------')
+
 // Listar turmas
+console.log('Listando as turmas:')
 console.log(escola.listarTurmas());
 
 const alunosTurma1 = turma1.listarAlunos();
