@@ -28,14 +28,14 @@ interface ITurma {
 }
 
 class Aluno implements IAluno {
-    nome: string;
-    sobrenome: string;
-    email: string;
-    tipo: 'presencial' | 'ead';
-    turma: number; // readonly
-    nascimento: Date;
-    notas: number[] = [];
-    ativo: boolean = true;
+    public nome: string;
+    public sobrenome: string;
+    public email: string;
+    public tipo: 'presencial' | 'ead';
+    public readonly turma: number;
+    public nascimento: Date;
+    public notas: number[] = [];
+    public ativo: boolean = true;
 
     constructor(
         nome: string,
@@ -46,8 +46,6 @@ class Aluno implements IAluno {
         nascimento: Date,
         notas?: number[]
     ) {
-
-
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.email = email;
@@ -64,20 +62,20 @@ class Aluno implements IAluno {
         }
     }
 
-    desativarAluno(): void {
+    public desativarAluno(): void {
         this.ativo = false;
     }
 
-    ativarAluno(): void {
+    public ativarAluno(): void {
         this.ativo = true;
     }
 
-    calcularMedia(): number {
+    public calcularMedia(): number {
         const soma = this.notas.reduce((acc, nota) => acc + nota, 0);
         return this.notas.length > 0 ? soma / this.notas.length : 0;
     }
 
-    verificarSituacao(): string {
+    public verificarSituacao(): string {
         const media = this.calcularMedia();
         if (media > 6) {
             return `${this.nome} ${this.sobrenome} está acima da média.`;
@@ -90,11 +88,11 @@ class Aluno implements IAluno {
 }
 
 class Turma implements ITurma {
-    codigo: number;
-    maximo: number;
-    alunos: Aluno[] = [];
-    descricao: string;
-    tipo: 'presencial' | 'ead';
+    public codigo: number;
+    public maximo: number;
+    public descricao: string;
+    public tipo: 'presencial' | 'ead';
+    public alunos: Aluno[] = []; // Mudando para público
 
     constructor(codigo: number, maximo: number, descricao: string, tipo: 'presencial' | 'ead') {
         if (codigo < 1 || codigo > 10) {
@@ -111,7 +109,7 @@ class Turma implements ITurma {
         this.tipo = tipo;
     }
 
-    adicionarAluno(aluno: Aluno): void {
+    public adicionarAluno(aluno: Aluno): void {
         if (this.alunos.length >= this.maximo) {
             throw new Error("Número máximo de alunos atingido para esta turma.");
         }
@@ -132,8 +130,7 @@ class Turma implements ITurma {
         this.alunos.push(aluno);
     }
 
-
-    removerAluno(email: string): void {
+    public removerAluno(email: string): void {
         const index = this.alunos.findIndex(aluno => aluno.email === email);
 
         if (index !== -1) {
@@ -143,38 +140,37 @@ class Turma implements ITurma {
         }
     }
 
-    atualizarAluno(email: string, novosDados: Partial<IAluno>): void {
+    public atualizarAluno(email: string, novosDados: Partial<IAluno>): void {
         const aluno = this.alunos.find(aluno => aluno.email === email);
         if (aluno) {
-            Object.assign(aluno, novosDados); // itera sobre cada objeto fonte e copia suas propriedades para o objeto destino
+            Object.assign(aluno, novosDados);
         } else {
             throw new Error("Aluno não encontrado.");
         }
     }
 
-    buscarAluno(email: string): IAluno | undefined {
+    public buscarAluno(email: string): IAluno | undefined {
         return this.alunos.find(aluno => aluno.email === email);
     }
 
-    listarAlunos(): IAluno[] {
+    public listarAlunos(): IAluno[] {
         return this.alunos;
     }
 
-    contarAlunos(): number {
+    public contarAlunos(): number {
         return this.alunos.length;
     }
 }
 
 class Escola {
-    nome: string;
-    turmas: Turma[] = [];
+    public nome: string;
+    private turmas: Turma[] = [];
 
     constructor(nome: string) {
         this.nome = nome;
     }
 
-    // Adicionar uma turma
-    adicionarTurma(turma: Turma): void {
+    public adicionarTurma(turma: Turma): void {
         if (this.turmas.length >= 10) {
             throw new Error("Não é possível adicionar mais de 10 turmas.");
         }
@@ -187,8 +183,7 @@ class Escola {
         this.turmas.push(turma);
     }
 
-    // Remover uma turma pelo código
-    removerTurma(codigo: number): void {
+    public removerTurma(codigo: number): void {
         const index = this.turmas.findIndex(turma => turma.codigo === codigo);
         if (index !== -1) {
             this.turmas.splice(index, 1);
@@ -197,18 +192,15 @@ class Escola {
         }
     }
 
-    // Retornar a lista de turmas
-    listarTurmas(): Turma[] {
+    public listarTurmas(): Turma[] {
         return this.turmas;
     }
 
-    // Contar o número de turmas
-    contarTurmas(): number {
+    public contarTurmas(): number {
         return this.turmas.length;
     }
 
-    // Gerar relatório da escola
-    gerarRelatorio(): void {
+    public gerarRelatorio(): void {
         const totalAlunos = this.turmas.reduce((acc, turma) => acc + turma.contarAlunos(), 0);
         const alunosAcimaDaMedia = this.turmas.flatMap(turma => 
             turma.listarAlunos().filter(aluno => aluno.calcularMedia() >= 6)
