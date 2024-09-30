@@ -270,25 +270,34 @@ console.log('----------------------------------------------------------------')
 console.log('Listando as turmas:')
 console.log(escola.listarTurmas());
 
+console.log('Listando alunos da turma 1')
 const alunosTurma1 = turma1.listarAlunos();
-console.log(alunosTurma1)
+console.log(alunosTurma1);
 console.log(turma1);
 console.log(turma2);
-console.log(`Média do Mariana: ${aluno4.calcularMedia()}`);
+
+console.log('Média')
+console.log(`Média do ${aluno4.nome}: ${aluno4.calcularMedia()}`);
+
+console.log(`Verificando situação do aluno ${aluno2.nome} e ${aluno4.nome}`)
 console.log(aluno4.verificarSituacao());
 console.log(aluno2.verificarSituacao());
 
+
 // Desativando o aluno
+console.log('Desativando o aluno')
 aluno4.desativarAluno();
 console.log(aluno4.ativo);
 // Apresentando o aluno 4 desativado
 console.log(JSON.stringify(aluno4));
 
 // Ativando o aluno novamente
+console.log('Ativando o aluno novamente')
 aluno4.ativarAluno();
 console.log(aluno4.ativo);
 // Apresentando o aluno 4 ativo novamente
 console.log(JSON.stringify(aluno4));
 
 // Gerar relatório da escola
+console.log('Gerando relatório:')
 escola.gerarRelatorio();
