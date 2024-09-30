@@ -165,9 +165,75 @@ class Turma implements ITurma {
     }
 }
 
+class Escola {
+    nome: string;
+    turmas: Turma[] = [];
+
+    constructor(nome: string) {
+        this.nome = nome;
+    }
+
+    // Adicionar uma turma
+    adicionarTurma(turma: Turma): void {
+        if (this.turmas.length >= 10) {
+            throw new Error("Não é possível adicionar mais de 10 turmas.");
+        }
+
+        const turmaExistente = this.turmas.find(t => t.codigo === turma.codigo);
+        if (turmaExistente) {
+            throw new Error("Código de turma já existente.");
+        }
+
+        this.turmas.push(turma);
+    }
+
+    // Remover uma turma pelo código
+    removerTurma(codigo: number): void {
+        const index = this.turmas.findIndex(turma => turma.codigo === codigo);
+        if (index !== -1) {
+            this.turmas.splice(index, 1);
+        } else {
+            throw new Error("Turma não encontrada.");
+        }
+    }
+
+    // Retornar a lista de turmas
+    listarTurmas(): Turma[] {
+        return this.turmas;
+    }
+
+    // Contar o número de turmas
+    contarTurmas(): number {
+        return this.turmas.length;
+    }
+
+    // Gerar relatório da escola
+    gerarRelatorio(): void {
+        const totalAlunos = this.turmas.reduce((acc, turma) => acc + turma.contarAlunos(), 0);
+        const alunosAcimaDaMedia = this.turmas.flatMap(turma => 
+            turma.listarAlunos().filter(aluno => aluno.calcularMedia() >= 6)
+        );
+        const alunosAbaixoDaMedia = this.turmas.flatMap(turma => 
+            turma.listarAlunos().filter(aluno => aluno.calcularMedia() < 6)
+        );
+
+        console.log(`Relatório da Escola: ${this.nome}`);
+        console.log(`Total de turmas: ${this.contarTurmas()}`);
+        console.log(`Total de alunos: ${totalAlunos}`);
+        console.log(`Alunos acima da média: ${alunosAcimaDaMedia.length}`);
+        console.log(`Alunos abaixo da média: ${alunosAbaixoDaMedia.length}`);
+    }
+}
+
+// Criando a escola
+const escola = new Escola("Escola Lógica Sempre");
 
 const turma1 = new Turma(1, 10, "Turma de Matemática", "presencial");
 const turma2 = new Turma(2, 10, "Turma de Português", "ead");
+
+// Adicionando as turmas na escola
+escola.adicionarTurma(turma1);
+escola.adicionarTurma(turma2);
 
 // Criando mais alunos
 const aluno1 = new Aluno("Isaias", "Soares", "isa.soares@email.com", "presencial", 1, new Date(2005, 5, 15), [8, 9, 10]);
@@ -186,6 +252,9 @@ turma1.adicionarAluno(aluno5);
 turma1.removerAluno("lucas.almeida@email.com");
 
 turma1.atualizarAluno("gabriela.silva@email.com", { notas: [5, 4, 3] });
+
+// Listar turmas
+console.log(escola.listarTurmas());
 
 const alunosTurma1 = turma1.listarAlunos();
 console.log(alunosTurma1)
@@ -206,3 +275,6 @@ aluno4.ativarAluno();
 console.log(aluno4.ativo);
 // Apresentando o aluno 4 ativo novamente
 console.log(JSON.stringify(aluno4));
+
+// Gerar relatório da escola
+escola.gerarRelatorio();
